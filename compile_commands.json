@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/jn403l/Documents/LALib-cpp",
+  "command": "/usr/bin/c++  -I/home/jn403l/Documents/LALib-cpp/include -g -std=gnu++20 -o CMakeFiles/main.dir/src/main.cpp.o -c /home/jn403l/Documents/LALib-cpp/src/main.cpp",
+  "file": "/home/jn403l/Documents/LALib-cpp/src/main.cpp",
+  "output": "CMakeFiles/main.dir/src/main.cpp.o"
+}
+]
