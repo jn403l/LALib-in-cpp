@@ -79,4 +79,47 @@ int main() {
 	PrintMatrix(squareMatrix2);
 	cout << "(Square matrix + 1.0) + Column vector = " << endl;
 	PrintMatrix(squareMatrix2 + testColumn);
+
+  // **************************************************
+	// Test equality operator
+	cout << endl << "********************" << endl;
+	cout << "Test equality operator." << endl;
+	cout << "testMatrix == testMatrix2: " << (testMatrix == testMatrix2) << endl;
+	cout << "testMatrix2 == testMatrix: " << (testMatrix2 == testMatrix) << endl;
+  cout << "(Let testMatrix3 = testMatrix)" << endl;
+  qbMatrix2<double> testMatrix3 = testMatrix;
+	cout << "testMatrix == testMatrix3: " << (testMatrix == testMatrix3) << endl;
+	cout << "testMatrix3 == testMatrix: " << (testMatrix3 == testMatrix) << endl;
+
+  // **************************************************
+	// Test matrix addition by scalar
+	cout << endl << "********************" << endl;
+	cout << "Test addition by scalar." << endl;
+  cout << "testMatrix + 2.0 = " << endl;
+  PrintMatrix(testMatrix+2.0);
+  cout << endl;
+  cout << "2.0 + testMatrix = " << endl;
+  PrintMatrix(2.0+testMatrix);
+
+  // **************************************************
+	// Test matrix subtraction by scalar
+	cout << endl << "********************" << endl;
+	cout << "Test addition by scalar." << endl;
+  cout << "testMatrix - 2.0 = " << endl;
+  PrintMatrix(testMatrix-2.0);
+  cout << endl;
+  cout << "2.0 - testMatrix = " << endl;
+  PrintMatrix(2.0-testMatrix);
+
+  // **************************************************
+	// Test matrix multiplication by scalar
+	cout << endl << "********************" << endl;
+	cout << "Test multiplication by scalar." << endl;
+  cout << "Test * 2.0 = " << endl;
+  PrintMatrix(testMatrix*2.0);
+  cout << endl;
+  cout << "2.0 * testMatrix = " << endl;
+  PrintMatrix(2.0*testMatrix);
+
+  return 0;
 }
