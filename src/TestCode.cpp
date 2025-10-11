@@ -121,5 +121,10 @@ int main() {
   cout << "2.0 * testMatrix = " << endl;
   PrintMatrix(2.0*testMatrix);
 
+//  TODO: remove leak and double free
+//  qbMatrix2<double> A(1, 1);
+//  qbMatrix2<double> B(2, 2);
+//  B = A;
+
   return 0;
 }
