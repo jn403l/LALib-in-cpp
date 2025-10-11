@@ -121,10 +121,20 @@ int main() {
   cout << "2.0 * testMatrix = " << endl;
   PrintMatrix(2.0*testMatrix);
 
-//  TODO: remove leak and double free
-//  qbMatrix2<double> A(1, 1);
-//  qbMatrix2<double> B(2, 2);
-//  B = A;
+  // **************************************************
+	// Test for copy assignment operator
+  double aData[2] = {1.0, 2.0};
+  qbMatrix2<double> A(1, 2, aData);
+  double bData[2] = {3.0, 4.0};
+  qbMatrix2<double> B(1, 2, bData);
+	cout << endl << "********************" << endl;
+  cout << "matrix A = " << endl;
+  PrintMatrix(A);
+  cout << "matrix B = " << endl;
+  PrintMatrix(B);
+  B = A;
+  cout << "B = A is: " << endl;
+  PrintMatrix(B);
 
   return 0;
 }

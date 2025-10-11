@@ -18,6 +18,7 @@ public:
 	qbMatrix2(int nRows, int nCols);
 	qbMatrix2(int nRows, int nCols, const T *inputData);
 	qbMatrix2(const qbMatrix2<T>& inputMatrix);
+  qbMatrix2<T>& operator=(const qbMatrix2<T>& otherMatrix);
 
 	// define the destructor
 	~qbMatrix2();
@@ -103,6 +104,23 @@ qbMatrix2<T>::qbMatrix2(const qbMatrix2<T>& inputMatrix) {
   m_matrixData = new T[m_nElements];
   for (int i = 0; i < m_nElements; i++)
     m_matrixData[i] = inputMatrix.m_matrixData[i];
+}
+
+// copy assignment operator
+template<class T>
+qbMatrix2<T>& qbMatrix2<T>::operator=(const qbMatrix2<T>& otherMatrix) {
+  if (this == &otherMatrix) return *this;
+  m_nRows = otherMatrix.m_nRows;
+  m_nCols = otherMatrix.m_nCols;
+  m_nElements = m_nRows * m_nCols;
+  if (this != &otherMatrix) {
+    T* m_newMatrixData = new T[m_nElements];
+    for (int i = 0; i < m_nElements; i++)
+      m_newMatrixData[i] = otherMatrix.m_matrixData[i];
+    delete[] m_matrixData;
+    m_matrixData = m_newMatrixData;
+  }
+  return *this;
 }
 
 // destructor
