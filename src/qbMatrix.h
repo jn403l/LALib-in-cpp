@@ -33,7 +33,7 @@ public:
 	int GetNumCols();
 
 	// overload == operator
-	bool operator== (const qbMatrix2<T>& rhs);
+	bool operator== (const qbMatrix2<T>& rhs) const;
 
 	// overload +, - and * operators (friends)
   /* (1) 行列と行列の足し算 */
@@ -367,7 +367,8 @@ qbMatrix2<T> operator* (const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
 THE == OPERATOR
 **************************************************/
 template<class T>
-bool qbMatrix2<T>::operator== (const qbMatrix2<T>& rhs) {
+bool qbMatrix2<T>::operator== (const qbMatrix2<T>& rhs) const {
+  // TODO: check if && should be ||
   // check if the matrices are the same size, if not return false
   if ((this->m_nRows != rhs.m_nRows) && (this->m_nCols != rhs.m_nCols))
     return false;
