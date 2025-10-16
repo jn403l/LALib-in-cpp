@@ -2,6 +2,7 @@
 #ifndef QBMATRIX2_H
 #define QBMATRIX2_H
 
+#include <stdexcept>
 /**
 standard two dimensional array:
 matrixArray = new double[3][3]
@@ -64,6 +65,7 @@ CONSTRUCTOR / DESTRUCTOR FUNCTION
 **************************************************/
 
 // default constructor
+// TODO: replace literal 0.0 with value-initialization T{}?
 template <class T>
 qbMatrix2<T>::qbMatrix2() {
   m_nRows = 1;
@@ -153,7 +155,8 @@ bool qbMatrix2<T>::resize(int numRows, int numCols) {
 
 /***************************************************
 ELEMENT FUNCTIONS
-**************************************************/
+ **************************************************/
+// TODO: throw on bounds error?
 template<class T>
 T qbMatrix2<T>::GetElement(int row, int col) {
   int linearIndex = Sub2Ind(row, col);
@@ -194,6 +197,8 @@ THE + OPERATOR
 // 行列 + 行列
 template<class T>
 qbMatrix2<T> operator+ (const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
+  if ((lhs.m_nCols != rhs.m_nCols) && (lhs.m_nRows != rhs.m_nRows))
+    throw std::invalid_argument("operator+: shape mismatch");
   int numRows = lhs.m_nRows;
   int numCols = lhs.m_nCols;
   int numElements = numRows * numCols;
@@ -242,6 +247,8 @@ THE - OPERATOR
 // 行列 - 行列
 template<class T>
 qbMatrix2<T> operator- (const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
+  if ((lhs.m_nCols != rhs.m_nCols) && (lhs.m_nRows != rhs.m_nRows))
+    throw std::invalid_argument("operator-: shape mismatch");
   int numRows = lhs.m_nRows;
   int numCols = lhs.m_nCols;
   int numElements = numRows * numCols;
