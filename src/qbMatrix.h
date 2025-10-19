@@ -305,18 +305,8 @@ THE == OPERATOR
 **************************************************/
 template<class T>
 bool qbMatrix2<T>::operator== (const qbMatrix2<T>& rhs) const {
-  // TODO: check if && should be ||
-  // check if the matrices are the same size, if not return false
-  if ((this->m_nRows != rhs.m_nRows) && (this->m_nCols != rhs.m_nCols))
-    return false;
-
-  // check if the elements are equal
-  bool flag = true;
-  for (int i = 0; i < this->m_nElements; ++i) {
-    if (this->m_matrixData[i] != rhs.m_matrixData[i])
-      flag = false;
-  }
-  return flag;
+  return m_nRows == rhs.m_nRows && m_nCols == rhs.m_nCols &&
+         std::equal(m_matrixData.begin(), m_matrixData.end(), rhs.m_matrixData.begin());
 }
 
 /***************************************************
