@@ -66,7 +66,7 @@ CONSTRUCTOR / DESTRUCTOR FUNCTION
 	template<class U> friend qbMatrix2<U> operator* (const qbMatrix2<U>&lhs, const U& rhs);
 
 private:
-	int Sub2Ind(int row, int col);
+	size_t Sub2Ind(int row, int col);
 
 private:
   int m_nRows = 0, m_nCols = 0;
@@ -87,7 +87,6 @@ void qbMatrix2<T>::resize(int numRows, int numCols) {
 /***************************************************
 ELEMENT FUNCTIONS
  **************************************************/
-// TODO: throw on bounds error?
 template<class T>
 T qbMatrix2<T>::GetElement(int row, int col) {
   int linearIndex = Sub2Ind(row, col);
@@ -324,11 +323,10 @@ bool qbMatrix2<T>::operator== (const qbMatrix2<T>& rhs) const {
 PRIVATE FUNCTIONS
 **************************************************/
 template<class T>
-int qbMatrix2<T>::Sub2Ind(int row, int col) {
-  if ((row < m_nRows) && (row >= 0) && (col < m_nCols) && (col >= 0))
-    return (row * m_nCols) + col;
-  else
-    return -1;
+size_t qbMatrix2<T>::Sub2Ind(int row, int col) {
+  if (row < 0 || col < 0 || row >= m_nRows || col >= m_nCols)
+    throw std::out_of_range("qbMatrix2::Sub2Ind");
+  return row * m_nCols + col;
 }
 
 #endif
