@@ -4,6 +4,7 @@
 
 #include <stdexcept>
 #include <vector>
+#include <iostream>
 /**
 standard two dimensional array:
 matrixArray = new double[3][3]
@@ -41,10 +42,10 @@ CONSTRUCTOR / DESTRUCTOR FUNCTION
 	void resize(int numRows, int numCols);
 
 	// element access methods
-	T GetElement(int row, int col);
-	bool SetElement(int row, int col, T elementValue);
-	int GetNumRows();
-	int GetNumCols();
+	T& GetElement(int row, int col);
+	T& SetElement(int row, int col, T elementValue);
+	int GetNumRows() const;
+	int GetNumCols() const;
 
 	// overload == operator
 	bool operator== (const qbMatrix2<T>& rhs) const;
@@ -88,32 +89,23 @@ void qbMatrix2<T>::resize(int numRows, int numCols) {
 ELEMENT FUNCTIONS
  **************************************************/
 template<class T>
-T qbMatrix2<T>::GetElement(int row, int col) {
-  int linearIndex = Sub2Ind(row, col);
-  if (linearIndex >= 0)
-    return m_matrixData[linearIndex];
-  else
-    return 0.0;
+T& qbMatrix2<T>::GetElement(int row, int col) {
+  return m_matrixData[Sub2Ind(row, col)];
 }
 
 template<class T>
-bool qbMatrix2<T>::SetElement(int row, int col, T elementValue) {
+T& qbMatrix2<T>::SetElement(int row, int col, T elementValue) {
   int linearIndex = Sub2Ind(row, col);
-  if (linearIndex >= 0) {
-    m_matrixData[linearIndex] = elementValue;
-    return true;
-  } else  {
-    return false;
-  }
+  return m_matrixData[static_cast<size_t>(linearIndex)];
 }
 
 template<class T>
-int qbMatrix2<T>::GetNumRows() {
+int qbMatrix2<T>::GetNumRows() const {
   return m_nRows;
 }
 
 template<class T>
-int qbMatrix2<T>::GetNumCols() {
+int qbMatrix2<T>::GetNumCols() const {
   return m_nCols;
 }
 
@@ -314,8 +306,14 @@ PRIVATE FUNCTIONS
 **************************************************/
 template<class T>
 size_t qbMatrix2<T>::Sub2Ind(int row, int col) {
-  if (row < 0 || col < 0 || row >= m_nRows || col >= m_nCols)
-    throw std::out_of_range("qbMatrix2::Sub2Ind");
+  if (row < 0 || col < 0 || row >= m_nRows || col >= m_nCols) {
+    try {
+      throw std::out_of_range("qbMatrix2::Sub2Ind");      
+    } catch (std::out_of_range& e) {
+      std::cout << "Exception: " << e.what() << std::endl;
+    }
+  }
+
   return row * m_nCols + col;
 }
 
