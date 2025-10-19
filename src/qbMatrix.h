@@ -38,7 +38,7 @@ CONSTRUCTOR / DESTRUCTOR FUNCTION
 	~qbMatrix2() = default;
 
 	// configuration methods
-	bool resize(int numRows, int numCols);
+	void resize(int numRows, int numCols);
 
 	// element access methods
 	T GetElement(int row, int col);
@@ -69,8 +69,6 @@ private:
 	int Sub2Ind(int row, int col);
 
 private:
-  // T *m_matrixData;
-  // int m_nRows, m_nCols, m_nElements;
   int m_nRows = 0, m_nCols = 0;
   std::vector<T> m_matrixData;
 };
@@ -80,20 +78,10 @@ private:
 CONFIGURATION FUNCTIONS
 **************************************************/
 template<class T>
-bool qbMatrix2<T>::resize(int numRows, int numCols) {
+void qbMatrix2<T>::resize(int numRows, int numCols) {
   m_nRows = numRows;
   m_nCols = numCols;
-  m_nElements = (m_nRows * m_nCols);
-  delete[] m_matrixData;
-  m_matrixData = new T[m_nElements];
-  if (m_matrixData != nullptr) {
-    for (int i = 0; i < m_nElements; i++)
-      m_matrixData[i] = 0.0;
-
-    return true;
-  } else {
-    return false;
-  }
+  m_matrixData.assign(static_cast<size_t>(m_nRows * m_nCols), T{});
 }
 
 /***************************************************
