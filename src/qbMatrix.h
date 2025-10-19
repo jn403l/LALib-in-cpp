@@ -3,6 +3,7 @@
 #define QBMATRIX2_H
 
 #include <stdexcept>
+#include <vector>
 /**
 standard two dimensional array:
 matrixArray = new double[3][3]
@@ -14,15 +15,27 @@ and linearIndex = (row * numCols) + col;
 template<class T>
 class qbMatrix2 {
 public:
-	// define the various constructors
-	qbMatrix2();
-	qbMatrix2(int nRows, int nCols);
-	qbMatrix2(int nRows, int nCols, const T *inputData);
-	qbMatrix2(const qbMatrix2<T>& inputMatrix);
-  qbMatrix2<T>& operator=(const qbMatrix2<T>& otherMatrix);
+  
+/***************************************************
+CONSTRUCTOR / DESTRUCTOR FUNCTION
+**************************************************/  
+	// rule of zero
+	qbMatrix2() : m_nRows(1), m_nCols(1), m_matrixData(1, T{}) {}
+	qbMatrix2(int nRows, int nCols)
+  : m_nRows(nRows), m_nCols(nCols), m_matrixData(static_cast<size_t>(nRows * nCols), T{}) {}
+
+	// construct from raw array
+  qbMatrix2(int nRows, int nCols, const T *inputData)
+  : m_nRows(nRows), m_nCols(nCols), m_matrixData(static_cast<size_t>(nRows * nCols)) {
+    std::copy(inputData, inputData + static_cast<size_t>(nRows * nCols), m_matrixData.begin());
+  }
+
+  // copy/move all defaulted
+	qbMatrix2(const qbMatrix2&) = default;
+  qbMatrix2& operator=(const qbMatrix2&) = default;
 
 	// define the destructor
-	~qbMatrix2();
+	~qbMatrix2() = default;
 
 	// configuration methods
 	bool resize(int numRows, int numCols);
@@ -56,81 +69,11 @@ private:
 	int Sub2Ind(int row, int col);
 
 private:
-  T *m_matrixData;
-  int m_nRows, m_nCols, m_nElements;
+  // T *m_matrixData;
+  // int m_nRows, m_nCols, m_nElements;
+  int m_nRows = 0, m_nCols = 0;
+  std::vector<T> m_matrixData;
 };
-
-/***************************************************
-CONSTRUCTOR / DESTRUCTOR FUNCTION
-**************************************************/
-
-// default constructor
-// TODO: replace literal 0.0 with value-initialization T{}?
-template <class T>
-qbMatrix2<T>::qbMatrix2() {
-  m_nRows = 1;
-  m_nCols = 1;
-  m_nElements = 1;
-  m_matrixData = new T[m_nElements];
-  m_matrixData[0] = 0.0;
-}
-
-// construct 零行列 (すべての要素は0)
-template<class T>
-qbMatrix2<T>::qbMatrix2(int nRows, int nCols) {
-  m_nRows = nRows;
-  m_nCols = nCols;
-  m_nElements = m_nRows * m_nCols;
-  m_matrixData = new T[m_nElements];
-  for (int i = 0; i < m_nElements; i++)
-    m_matrixData[i] = 0.0;
-}
-
-// construct from const 配列
-template<class T>
-qbMatrix2<T>::qbMatrix2(int nRows, int nCols, const T *inputData) {
-  m_nRows = nRows;
-  m_nCols = nCols;
-  m_nElements = m_nRows * m_nCols;
-  m_matrixData = new T[m_nElements];
-  for (int i = 0; i < m_nElements; i++)
-    m_matrixData[i] = inputData[i];
-}
-
-// copy constructor
-template<class T>
-qbMatrix2<T>::qbMatrix2(const qbMatrix2<T>& inputMatrix) {
-  m_nRows = inputMatrix.m_nRows;
-  m_nCols = inputMatrix.m_nCols;
-  m_nElements = m_nRows * m_nCols;
-  m_matrixData = new T[m_nElements];
-  for (int i = 0; i < m_nElements; i++)
-    m_matrixData[i] = inputMatrix.m_matrixData[i];
-}
-
-// copy assignment operator
-template<class T>
-qbMatrix2<T>& qbMatrix2<T>::operator=(const qbMatrix2<T>& otherMatrix) {
-  if (this == &otherMatrix) return *this;
-  m_nRows = otherMatrix.m_nRows;
-  m_nCols = otherMatrix.m_nCols;
-  m_nElements = m_nRows * m_nCols;
-  if (this != &otherMatrix) {
-    T* m_newMatrixData = new T[m_nElements];
-    for (int i = 0; i < m_nElements; i++)
-      m_newMatrixData[i] = otherMatrix.m_matrixData[i];
-    delete[] m_matrixData;
-    m_matrixData = m_newMatrixData;
-  }
-  return *this;
-}
-
-// destructor
-template<class T>
-qbMatrix2<T>::~qbMatrix2() {
-  if (m_matrixData != nullptr)
-    delete[] m_matrixData;
-}
 
 
 /***************************************************
