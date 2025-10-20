@@ -191,74 +191,52 @@ THE * OPERATOR
 // スカラー * 行列
 template<class T>
 qbMatrix2<T> operator* (const T& lhs, const qbMatrix2<T>& rhs) {
-  int numRows = rhs.m_nRows;
-  int numCols = rhs.m_nCols;
-  int numElements = numRows * numCols;
-  T *tempResult = new T[numElements];
-  for (int i = 0; i < numElements; ++i)
-    tempResult[i] = lhs * rhs.m_matrixData[i];
-
-  qbMatrix2<T> result(numRows, numCols, tempResult);
-  delete[] tempResult;
+  qbMatrix2<T> result(rhs.m_nRows, rhs.m_nCols);
+  const size_t numElements = result.m_matrixData.size();
+  for (size_t i = 0; i < numElements; ++i)
+    result.m_matrixData[i] = lhs * rhs.m_matrixData[i];
   return result;
 }
 
 // 行列 - スカラー
 template<class T>
 qbMatrix2<T> operator* (const qbMatrix2<T>& lhs, const T& rhs) {
-  int numRows = lhs.m_nRows;
-  int numCols = lhs.m_nCols;
-  int numElements = numRows * numCols;
-  T *tempResult = new T[numElements];
-  for (int i = 0; i < numElements; ++i)
-    tempResult[i] = lhs.m_matrixData[i] * rhs;
-
-  qbMatrix2<T> result(numRows, numCols, tempResult);
-  delete[] tempResult;
+  qbMatrix2<T> result(lhs.m_nRows, lhs.m_nCols);
+  const size_t numElements = result.m_matrixData.size();
+  for (size_t i = 0; i < numElements; ++i)
+    result.m_matrixData[i] = lhs.m_matrixData[i] * rhs;
   return result;
 }
 
 // 行列 * 行列
 template<class T>
 qbMatrix2<T> operator* (const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
-  int r_numRows = rhs.m_nRows;
-  int r_numCols = rhs.m_nCols;
-  int l_numRows = lhs.m_nRows;
-  int l_numCols = lhs.m_nCols;
-
-  if (l_numCols == r_numRows) {
+  qbMatrix2<T> result(lhs.m_nRows, rhs.m_nCols);
+  if (lhs.m_nCols == rhs.m_nRows) {
     // this is the standard matrix multiplication condition.
     // the output will be the same size as the RHS
-    T *tempResult = new T[lhs.m_nRows * rhs.m_nCols];
-
     // loop through each row of the LHS
-    for (int  lhsRow = 0; lhsRow < l_numRows; lhsRow++) {
+    for (int  lhsRow = 0; lhsRow < lhs.m_nRows; lhsRow++) {
       // loop through each column on the RHS
-      for (int rhsCol = 0; rhsCol < r_numCols; rhsCol++) {
-        T elementResult = 0.0;
+      for (int rhsCol = 0; rhsCol < rhs.m_nCols; rhsCol++) {
+        T elementResult = T{};
         // loop through each element of this LHS row
-        for (int lhsCol = 0; lhsCol < l_numCols; lhsCol++) {
+        for (int lhsCol = 0; lhsCol < lhs.m_nCols; lhsCol++) {
           // compute the LHS linear index
-          int lhsLinearIndex = (lhsRow + l_numCols) + lhsCol;
+          const size_t lhsLinearIndex = static_cast<size_t>(lhsRow * lhs.m_nCols + lhsCol);
 
           // compute the RHS linear index (based on LHS col)
           // rhs row number equal to lhs colum number
-          int rhsLinearIndex = (lhsCol * r_numCols) + rhsCol;
+          const size_t rhsLinearIndex = static_cast<size_t>(lhsCol * rhs.m_nCols + rhsCol);
 
           // perform the calculation on these elements
-          elementResult += (lhs.m_matrixData[lhsLinearIndex] * rhs.m_matrixData[rhsLinearIndex]);
+          elementResult += lhs.m_matrixData[lhsLinearIndex] * rhs.m_matrixData[rhsLinearIndex];
         }
 
         // store the result
-        int resultLinearIndex = (lhsRow * r_numCols) + rhsCol;
-        tempResult[resultLinearIndex] = elementResult;
+        result.m_matrixData[static_cast<size_t>(lhsRow * rhs.m_nCols + rhsCol)] = elementResult;
       }
     }
-    qbMatrix2<T> result(l_numRows, r_numCols, tempResult);
-    delete[] tempResult;
-    return result;
-  } else {
-    qbMatrix2<T> result(1, 1);
     return result;
   }
 }
