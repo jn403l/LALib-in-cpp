@@ -157,45 +157,31 @@ template<class T>
 qbMatrix2<T> operator- (const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
   if ((lhs.m_nCols != rhs.m_nCols) && (lhs.m_nRows != rhs.m_nRows))
     throw std::invalid_argument("operator-: shape mismatch");
-  int numRows = lhs.m_nRows;
-  int numCols = lhs.m_nCols;
-  int numElements = numRows * numCols;
-  T *tempResult = new T[numElements];
-  for (int i = 0; i < numElements; i++)
-    tempResult[i] = lhs.m_matrixData[i] - rhs.m_matrixData[i];
 
-  qbMatrix2<T> result(numRows, numCols, tempResult);
-  delete[] tempResult;
+  qbMatrix2<T> result(lhs.m_nRows, lhs.m_nCols);
+  const size_t numElements = result.m_matrixData.size();
+  for (size_t i = 0; i < numElements; ++i)
+    result.m_matrixData[i] = lhs.m_matrixData[i] - rhs.m_matrixData[i];
   return result;
 }
 
 // スカラー - 行列
 template<class T>
 qbMatrix2<T> operator- (const T& lhs, const qbMatrix2<T>& rhs) {
-  int numRows = rhs.m_nRows;
-  int numCols = rhs.m_nCols;
-  int numElements = numRows * numCols;
-  T *tempResult = new T[numElements];
-  for (int i = 0; i < numElements; ++i)
-    tempResult[i] = lhs - rhs.m_matrixData[i];
-
-  qbMatrix2<T> result(numRows, numCols, tempResult);
-  delete[] tempResult;
+  qbMatrix2<T> result(rhs.m_nRows, rhs.m_nCols);
+  const size_t numElements = result.m_matrixData.size();
+  for (size_t i = 0; i < numElements; ++i)
+    result.m_matrixData[i] = lhs - rhs.m_matrixData[i];
   return result;
 }
 
 // 行列 - スカラー
 template<class T>
 qbMatrix2<T> operator- (const qbMatrix2<T>& lhs, const T& rhs) {
-  int numRows = lhs.m_nRows;
-  int numCols = lhs.m_nCols;
-  int numElements = numRows * numCols;
-  T *tempResult = new T[numElements];
-  for (int i = 0; i < numElements; ++i)
-    tempResult[i] = lhs.m_matrixData[i] - rhs;
-
-  qbMatrix2<T> result(numRows, numCols, tempResult);
-  delete[] tempResult;
+  qbMatrix2<T> result(lhs.m_nRows, lhs.m_nCols);
+  const size_t numElements = result.m_matrixData.size();
+  for (size_t i = 0; i < numElements; ++i)
+    result.m_matrixData[i] = lhs.m_matrixData[i] - rhs;
   return result;
 }
 
