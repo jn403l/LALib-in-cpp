@@ -212,33 +212,42 @@ qbMatrix2<T> operator* (const qbMatrix2<T>& lhs, const T& rhs) {
 template<class T>
 qbMatrix2<T> operator* (const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
   qbMatrix2<T> result(lhs.m_nRows, rhs.m_nCols);
-  if (lhs.m_nCols == rhs.m_nRows) {
-    // this is the standard matrix multiplication condition.
-    // the output will be the same size as the RHS
-    // loop through each row of the LHS
-    for (int  lhsRow = 0; lhsRow < lhs.m_nRows; lhsRow++) {
-      // loop through each column on the RHS
-      for (int rhsCol = 0; rhsCol < rhs.m_nCols; rhsCol++) {
-        T elementResult = T{};
-        // loop through each element of this LHS row
-        for (int lhsCol = 0; lhsCol < lhs.m_nCols; lhsCol++) {
-          // compute the LHS linear index
-          const size_t lhsLinearIndex = static_cast<size_t>(lhsRow * lhs.m_nCols + lhsCol);
-
-          // compute the RHS linear index (based on LHS col)
-          // rhs row number equal to lhs colum number
-          const size_t rhsLinearIndex = static_cast<size_t>(lhsCol * rhs.m_nCols + rhsCol);
-
-          // perform the calculation on these elements
-          elementResult += lhs.m_matrixData[lhsLinearIndex] * rhs.m_matrixData[rhsLinearIndex];
-        }
-
-        // store the result
-        result.m_matrixData[static_cast<size_t>(lhsRow * rhs.m_nCols + rhsCol)] = elementResult;
-      }
+  if (lhs.m_nCols != rhs.m_nRows) {
+    try {
+      throw std::invalid_argument("operator*: shape mismatch");
+    } catch (std::invalid_argument& e) {
+      std::cout << "Exception: " << e.what() << std::endl;
     }
-    return result;
   }
+  // this is the standard matrix multiplication condition.
+  // the output will be the same size as the RHS
+  // loop through each row of the LHS
+  for (int lhsRow = 0; lhsRow < lhs.m_nRows; lhsRow++) {
+    // loop through each column on the RHS
+    for (int rhsCol = 0; rhsCol < rhs.m_nCols; rhsCol++) {
+      T elementResult = T{};
+      // loop through each element of this LHS row
+      for (int lhsCol = 0; lhsCol < lhs.m_nCols; lhsCol++) {
+        // compute the LHS linear index
+        const size_t lhsLinearIndex =
+            static_cast<size_t>(lhsRow * lhs.m_nCols + lhsCol);
+
+        // compute the RHS linear index (based on LHS col)
+        // rhs row number equal to lhs colum number
+        const size_t rhsLinearIndex =
+            static_cast<size_t>(lhsCol * rhs.m_nCols + rhsCol);
+
+        // perform the calculation on these elements
+        elementResult +=
+            lhs.m_matrixData[lhsLinearIndex] * rhs.m_matrixData[rhsLinearIndex];
+      }
+
+      // store the result
+      result.m_matrixData[static_cast<size_t>(lhsRow * rhs.m_nCols + rhsCol)] =
+          elementResult;
+    }
+  }
+  return result;
 }
 
 
