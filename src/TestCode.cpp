@@ -63,7 +63,7 @@ int main() {
 	cout << endl << "********************" << endl;
 	cout << "Test multiplication of column vector by matrix." << endl;
 	double columnData[3] = {1.5, 2.5, 3.5};
-	double squareData[9] = {1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0};
+	double squareData[9] = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
 	qbMatrix2<double> testColumn(3, 1, columnData);
 	qbMatrix2<double> squareMatrix(3, 3, squareData);
 	cout << "Column vector = " << endl;
@@ -77,8 +77,8 @@ int main() {
 	cout << "Square matrix + 1.0 = " << endl;
 	qbMatrix2<double> squareMatrix2 = squareMatrix + 1.0;
 	PrintMatrix(squareMatrix2);
-	cout << "(Square matrix + 1.0) + Column vector = " << endl;
-	PrintMatrix(squareMatrix2 + testColumn);
+	cout << "(Square matrix + 1.0) * Column vector = " << endl;
+	PrintMatrix(squareMatrix2 * testColumn);
 
   // **************************************************
 	// Test equality operator
@@ -104,7 +104,7 @@ int main() {
   // **************************************************
 	// Test matrix subtraction by scalar
 	cout << endl << "********************" << endl;
-	cout << "Test addition by scalar." << endl;
+	cout << "Test subtraction by scalar." << endl;
   cout << "testMatrix - 2.0 = " << endl;
   PrintMatrix(testMatrix-2.0);
   cout << endl;
